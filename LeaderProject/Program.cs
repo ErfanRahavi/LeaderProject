@@ -12,7 +12,7 @@ namespace Leader
     {
         static void Main(string[] args)
         {
-            IWebDriver driver = new ChromeDriver("C:\\Users\\erfan\\Downloads\\chromedriver_win32");
+            IWebDriver driver = new ChromeDriver("C:\\Users\\erfan\\source\\repos\\LeaderProject\\LeaderProject\\chromedriver_win32");
             driver.Navigate().GoToUrl("https://www.leader.ir/");
             Console.WriteLine("opened browser");
 
@@ -75,7 +75,7 @@ namespace Leader
 
                         string statementsDetails = $"{ti}\n\n + {no}";
                         Thread.Sleep(1000);
-                        File.WriteAllText($@"C:\Users\erfan\source\repos\LeaderProject\{te}.txt", statementsDetails);
+                        File.WriteAllText($@"C:\Users\erfan\source\repos\LeaderProject\LeaderProject\{te}.txt", statementsDetails);
                         Thread.Sleep(1000);
 
 
