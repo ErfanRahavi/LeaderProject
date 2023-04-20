@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Data.SQLite;
 
 namespace Leader
 {
@@ -12,9 +13,27 @@ namespace Leader
     {
         static void Main(string[] args)
         {
-            IWebDriver driver = new ChromeDriver("C:\\Users\\erfan\\source\\repos\\LeaderProject\\LeaderProject\\chromedriver_win32");
+            var directory = Environment.CurrentDirectory;
+            var filePath = Path.GetFullPath(directory);
+            IWebDriver driver = new ChromeDriver(filePath);
             driver.Navigate().GoToUrl("https://www.leader.ir/");
             Console.WriteLine("opened browser");
+
+            string path = "dataTable.db";
+            
+            if (!File.Exists(path))
+            {
+                SQLiteConnection.CreateFile(path);
+                using (var sqlite = new SQLiteConnection(@"Data Source=" + path))
+                {
+                    sqlite.Open();
+                    string sql = "create table leader(statements TEXT)";
+                    SQLiteCommand command = new SQLiteCommand(sql, sqlite);
+                    command.ExecuteNonQuery();
+                }
+
+            }
+
 
             var dataList = driver.FindElements(By.XPath("/html/body/footer/nav[1]/div/div[2]/div/div[1]/div[1]/ul/li"));
             int countDataListTopics = dataList.Count();
@@ -38,7 +57,7 @@ namespace Leader
             var years = driver.FindElements(By.XPath("/html/body/main/div[1]/section[1]/main/div[2]/ul/li"));
             var month = driver.FindElements(By.XPath("/html/body/main/div[1]/section[1]/main/div[3]/ul/li"));
 
-            for (int i = 2; i <= years.Count; i++)
+            for (int i = 2; i <= 2; i++)
             {
                 var selectedYear = driver.FindElement(By.XPath($"/html/body/main/div[1]/section[1]/main/div[2]/ul/li[{i}]"));
                 Thread.Sleep(1000);
@@ -75,7 +94,7 @@ namespace Leader
 
                         string statementsDetails = $"{newsTopic}\n\n + {newsText}";
                         Thread.Sleep(1000);
-                        File.WriteAllText($@"C:\Users\erfan\source\repos\LeaderProject\LeaderProject\{newsTime}.txt", statementsDetails);
+                        //File.WriteAllText($@"C:\Users\erfan\source\repos\LeaderProject\LeaderProject\{newsTime}.txt", statementsDetails);
                         Thread.Sleep(1000);
 
 
