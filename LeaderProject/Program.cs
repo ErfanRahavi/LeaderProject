@@ -101,9 +101,9 @@ namespace Leader
                             SQLiteConnection con = new SQLiteConnection("Data Source = dataTable.db");
                             con.Open();
                             SQLiteCommand cmd = new SQLiteCommand();
-                            cmd.CommandText = "insert into leader(statements TEXT) values(@statements TEXT)";
+                            cmd.CommandText = "insert into leader(statements) VALUES(@statements)";
                             cmd.Connection = con;
-                            cmd.Parameters.AddWithValue("@statements TEXT)", statementsDetails);
+                            cmd.Parameters.AddWithValue("@statements", statementsDetails);
                             cmd.ExecuteNonQuery();
                         }
                         catch (Exception ex)
