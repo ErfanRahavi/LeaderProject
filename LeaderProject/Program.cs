@@ -20,7 +20,7 @@ namespace Leader
             Console.WriteLine("opened browser");
 
             string path = "dataTable.db";
-            
+
             if (!File.Exists(path))
             {
                 SQLiteConnection.CreateFile(path);
@@ -94,35 +94,49 @@ namespace Leader
 
                         string statementsDetails = $"{newsTopic}\n\n + {newsText}";
                         Thread.Sleep(1000);
-                        //File.WriteAllText($@"C:\Users\erfan\source\repos\LeaderProject\LeaderProject\{newsTime}.txt", statementsDetails);
-                        Thread.Sleep(1000);
-
 
                         try
                         {
-                            driver.Navigate().Back();
+                            SQLiteConnection con = new SQLiteConnection("Data Source = dataTable.db");
+                            con.Open();
+                            SQLiteCommand cmd = new SQLiteCommand();
+                            cmd.CommandText = "insert into leader(statements) VALUES(@statements)";
+                            cmd.Connection = con;
+                            cmd.Parameters.AddWithValue("@statements", statementsDetails);
+                            cmd.ExecuteNonQuery();
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine(ex);
                         }
-
-
-                        var selectedDefultYears = driver.FindElement(By.XPath($"/html/body/main/div[1]/section[1]/main/div[2]/ul/li[{i}]"));
-                        Thread.Sleep(500);
-
-                        selectedDefultYears.Click();
-
-
-                        Thread.Sleep(500);
-                        var selectedDefultMonth = driver.FindElement(By.XPath($"/html/body/main/div[1]/section[1]/main/div[3]/ul/li[{j}]"));
-
-                        selectedDefultMonth.Click();
-                        Thread.Sleep(500);
                     }
+
+
+                    try
+                    {
+                        driver.Navigate().Back();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+
+
+                    var selectedDefultYears = driver.FindElement(By.XPath($"/html/body/main/div[1]/section[1]/main/div[2]/ul/li[{i}]"));
+                    Thread.Sleep(500);
+
+                    selectedDefultYears.Click();
+
+
+                    Thread.Sleep(500);
+                    var selectedDefultMonth = driver.FindElement(By.XPath($"/html/body/main/div[1]/section[1]/main/div[3]/ul/li[{j}]"));
+
+                    selectedDefultMonth.Click();
+                    Thread.Sleep(500);
                 }
             }
-            //driver.Quit();
         }
+        //driver.Quit();
     }
+}
 }
